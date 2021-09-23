@@ -1,19 +1,30 @@
-# OCI_LB_TrafficManagement
+# OCI LB TrafficManagement
 This repository has practical use case for LB and Global Region Traffic Management Policies
 
+# IMPORTANT
+To complete this lab, you must have an OCI account, not all services are free tier, but you should be able to complete all the lab with an active OCI trial account, if don't have one [Click Here](https://www.oracle.com/cloud/free/)
 
-# Micronaut on OCI Using ATP - DEMO
-
+Also, to complete the Traffic Management Policies on OCI, you need to have an active DNS registration name, if don't have one, you can use [Freenom](https://www.freenom.com/)
 ## Summary
-This repository covers the DEMO for LAB: [OCI LAB](https://oracle.github.io/learning-library/developer-library/micronaut-oci-atp/workshops/freetier/?lab=introduction), all the source code is working as tested on 5 Apr - 2021. All the instructions for compile, build and deploy are described in this README, have fun and happy coding !
-
+In this lab you are going to configure and create on OCI:
+- [**Network**]
+- [**Security Lists / Network Security Groups**]
+- [**Create Compute Instances**]
+- [**Install and Configure HTTPD**]
+- [**Create and Configure Load Balancers**]
+- [**Create Public Zones**]
+- [**Configure Public DNS Zones and Specific IPs**]
+- [**Create an Global Traffic Management Policy**]
+- [**Create Health Checks for your Infrastructure**]
+- [**Put it all together to manage the network traffic of your application**]
 ## Required tools to create this DEMO
 
 - [**OCI TENANT**]
-- [**ATP Databse**]
-## Steps to config
+- [**Free Register of DNS name**]
+# START
+## Network Config
 
-1-) Create user screen on DB Tool (ATP Instance)
+
 
 ```hcl
 CREATE USER mnocidemo IDENTIFIED BY "XXXXXXXXX";
