@@ -7,16 +7,16 @@ To complete this lab, you must have an OCI account, not all services are free ti
 Also, to complete the Traffic Management Policies on OCI, you need to have an active DNS registration name, if don't have one, you can use [Freenom](https://www.freenom.com/)
 ## Summary
 In this lab you are going to configure and create on OCI:
-- [**Network**]
-- [**Security Lists / Network Security Groups**]
-- [**Create Compute Instances**]
-- [**Install and Configure HTTPD**]
-- [**Create and Configure Load Balancers**]
-- [**Create Public Zones**]
-- [**Configure Public DNS Zones and Specific IPs**]
-- [**Create an Global Traffic Management Policy**]
-- [**Create Health Checks for your Infrastructure**]
-- [**Put it all together to manage the network traffic of your application**]
+- **Network**
+- **Security Lists / Network Security Groups**
+- **Create Compute Instances**
+- **Install and Configure HTTPD**
+- **Create and Configure Load Balancers**
+- **Create Public Zones**
+- **Configure Public DNS Zones and Specific IPs**
+- **Create an Global Traffic Management Policy**
+- **Create Health Checks for your Infrastructure**
+- **Put it all together to manage the network traffic of your application**
 ## Required tools to create this DEMO
 
 - [**OCI TENANT**]
