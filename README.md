@@ -91,161 +91,117 @@ Add SSH Keys: Choose 'Paste SSH Keys' and paste the Public Key you created in Cl
 
 NOTE: The lab instruction places the instances on a <b>private subnets</b>. If you wish to access them, you can create the Bastion Service and create an SSH Session.
 
-Click Create.
+If you want to manually provision and configure the Apache on each instance, you can create the instance now, proceed to TASK 4.
 
+<b>To skip the next step, you can use the "Cloud-Init" to paste all the required instance configuration procedures to be executed automatically after the instance creation, if you do so, there's no need to SSH into the instace to configure the Web Server</b>
+
+<p align="center">
+  <img src="./Images/Cloud-Init.jpg">
+</p>
+
+Paste this script on the "Cloud-Init Script" location (sa-saopaulo-1) instances:
 ```hcl
-CREATE USER mnocidemo IDENTIFIED BY "XXXXXXXXX";
-GRANT CONNECT, RESOURCE TO mnocidemo;
-GRANT UNLIMITED TABLESPACE TO mnocidemo;
+#! /bin/bash
+sudo setenforce 0
+sudo yum clean all
+sudo yum -y update
+sudo yum -y install httpd
+sudo systemctl start httpd
+sudo systemctl enable httpd
+sudo firewall-cmd --permanent --zone=public --add-service=http
+sudo firewall-cmd --permanent --zone=public --add-service=https
+sudo firewall-cmd --reload
+sudo -s 
+cat <<EOF > /var/www/html/index.html
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCI Load Balancer</title>
+</head>
+<body>
+    <center> <h1>The Cloud Bootcamp</h1>
+            <h2>Instance provisioned and running Apache with success &#x270C;</h2>
+            <h2>Instance region: sa-saopaulo-<Instance Number ID></h2>
+            <hr>
+            <img src="https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/grri30nzv1ul/b/public/o/bandeira-do-brasil.jpg" alt="success" width="500" height="300">
+    </center>
+</body>
+</html>
+EOF
+```
+Paste this script on the "Cloud-Init Script" location (us-ashburn-1) instances:
+```hcl
+#! /bin/bash
+sudo setenforce 0
+sudo yum clean all
+sudo yum -y update
+sudo yum -y install httpd
+sudo systemctl start httpd
+sudo systemctl enable httpd
+sudo firewall-cmd --permanent --zone=public --add-service=http
+sudo firewall-cmd --permanent --zone=public --add-service=https
+sudo firewall-cmd --reload
+sudo -s 
+cat <<EOF > /var/www/html/index.html
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCI Load Balancer</title>
+</head>
+<body>
+    <center> <h1>The Cloud Bootcamp</h1>
+            <h2>Instance provisioned and running Apache with success &#x270C;</h2>
+            <h2>Instance region: us-ashburn-<Instance Number ID></h2>
+            <hr>
+            <img src="https://objectstorage.sa-saopaulo-1.oraclecloud.com/n/grri30nzv1ul/b/public/o/Bandeira-dos-Estados-Unidos.png" alt="success" width="500" height="300">
+    </center>
+</body>
+</html>
+EOF
 ```
 
+Using the same method, create 2 instances on each region, just change the Instance Number ID so when you test using your browser you can see the Load Balancer Round-Robin mechanism working.
+
+- [**OPTIONAL**]
+If you want to use [Bastion Service](https://docs.oracle.com/en-us/iaas/Content/Bastion/Concepts/bastionoverview.htm) to access your instance, on the creation process, go to "Advanced Options" -> "Oracle Cloud Agent" and select the checkbox to enable "Bastion"
 <p align="center">
-  <img src="./docs/image-1.png">
+  <img src="./Images/Bastion.jpg">
 </p>
 
-2-) Download ATP Wallet file
+After compleating this TASK you should have on your OCI account:
+- **VCN completed on Sao Paulo region**
+- **2 Instances on Running State on Sao Paulo region**
+- **VCN completed on Ashburn region**
+- **2 Instances on Running State on Ashburn region**
 
-Next setp download the wallet for JDBC configuration. I'll use the same password from user, but it's not recommended. 
-You should create your own wallet password
-
+## TASK4: Install Apache on each Instance
+This task let's you configure manually the Apache server on each instance. <b><i>Since we created the instance on the private subnet, you need to use the Bastion Service to SSH, look at the [getting started](https://docs.oracle.com/en-us/iaas/Content/Bastion/Concepts/bastionoverview.htm#get-started) of the service to create the Bastion and then create the session to copy the SSH command</i></b>
 <p align="center">
-  <img src="./docs/image-2.png">
+  <img src="./Images/Bastion-Session.jpg">
 </p>
 
-Save the file and extract the contents of the wallet into the Micronaut Application tmp/wallet dir, with this command:
+After you access the instance, enter these commands to install and configure Apache:
 
+Install Apache HTTP Server
 ```hcl
-unzip /path/to/Wallet.zip -d /tmp/wallet
+sudo yum -y install httpd
+```
+Open TCP port 80 in the local firewall
+```hcl
+sudo firewall-cmd --permanent  --add-port=80/tcp
+```
+Reload the firewall to activate the rules
+```hcl
+sudo firewall-cmd --reload
+```
+Start the web server
+```hcl
+sudo systemctl start httpd
+sudo systemctl enable httpd
 ```
 
-<p align="center">
-  <img src="./docs/image-3.png">
-</p>
-
-Autonomous Database have different connections pools to configure with your application, if you open the file "tnsnames.ora" you should see 3 different connection pools:
-<your DB>_high
-<your DB>_medium
-<your DB>_low
-
-You can pick the high for this example, but if you want to know more details about the connection pools, please see this link:
-[ATP Connection Settings](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-jdbc-thin-wallet.html#GUID-1640CC02-BF3E-48C2-8FFE-A596614A6A40)
-
-Just save this connection pool name for latter, we'll need it to configure the application.yml file latter !
-
-3-) Now let's configure the Minonaut Application !!
-
-First, use the quick launch micronaut site to create the sample application structure and files:
-[Micronaut Launch](https://micronaut.io/launch/)
-
-<p align="center">
-  <img src="./docs/image-4.png">
-</p>
-
-Download the zip, expand on your machine and let's configure the DEMO
-
-```hcl
-micronaut:
-  application:
-    name: demoATP
-  executors:
-    io:
-      type: fixed
-      nThreads: 75
-datasources:
-  default:
-    url: jdbc:oracle:thin:@mnociatp_high?tns_admin=/tmp/wallet
-    driverClassName: oracle.jdbc.OracleDriver
-    username: mnocidemo
-    password: YOUR PASS
-    dialect: ORACLE
-    data-source-properties:
-      oracle:
-        jdbc:
-          fanEnabled: false
-flyway:
-  datasources:
-    default:
-      enabled: true
-```
-
-<p align="center">
-  <img src="./docs/image-5.png">
-</p>
-
-Update the password of the application.yml with the created password of the schema user created
-
-In the Gradle build file "build.gradle" add the following dependencys:
-
-```hcl
-runtimeOnly("com.oracle.database.security:oraclepki:21.1.0.0")
-runtimeOnly("com.oracle.database.security:osdt_cert:21.1.0.0")
-runtimeOnly("com.oracle.database.security:osdt_core:21.1.0.0")
-runtimeOnly("io.micronaut.flyway:micronaut-flyway")
-```
-
-<p align="center">
-  <img src="./docs/image-6.png">
-</p>
-
-4-) Build and Test the App
-
-[**GRADLE BUILD TESTS ERROS:**]
-
-<p align="center">
-  <img src="./docs/image-7.png">
-</p>
-
-You might get some erros during the build / test with [Gradle](https://gradle.org/)
-
-<p align="center">
-  <img src="./docs/image-8.png">
-</p>
-
-
-io.micronaut.context.exceptions.BeanInstantiationException: Bean definition [javax.sql.DataSource] could not be loaded: Error instantiating bean of type [javax.sql.DataSource]: Failed to initialize pool: IO Error: could not resolve the connect identifier  "<your connection pool>" (CONNECTION_ID=RkjDYM/DQG6+wHufZR2HVw==)
-
-If that is the case, check if your wallet files are in the correct directory and check also the application.yml file configuration :)
-
-5-) Success Running App \o/
-
-[**BUILD SUCCESSFUL RUNNING THE APPLICATION**]
-
-<p align="center">
-  <img src="./docs/image-9.png">
-</p>
-
-Check the application:
-<p align="center">
-  <img src="./docs/image-10.png">
-</p>
-
-<p align="center">
-  <img src="./docs/image-11.png">
-</p>
-
-Congratulations, you can now deploy the APP to OCI instance
-
-## OPTIONAL - Build the native image
-After the build and run success we can install the GraalVM package to build the native image for deployment
-To get the GraalVM on your SO, go to the link and proceed with the install steps
-- [Download](https://github.com/graalvm/graalvm-ce-builds/releases)
-- [Install Steps](https://www.graalvm.org/docs/getting-started/#install-graalvm)
-
-**Explanation to install native-image with gu update tool:**
-- [Install Native Image gu tool](https://docs.oracle.com/en/graalvm/enterprise/19/guide/reference/native-image/native-image.html)
-
-**Links to Oracle DOCs GraalVM 21:**
-- [GraalVM Enterprise](https://docs.oracle.com/en/graalvm/enterprise/21/docs/getting-started/#install-graalvm-enterprise)
-- [Getting Started](https://docs.oracle.com/en/graalvm/enterprise/21/docs/getting-started/)
-
-## Micronaut 2.4.1 Documentation
-
-- [User Guide](https://docs.micronaut.io/2.4.1/guide/index.html)
-- [API Reference](https://docs.micronaut.io/2.4.1/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/2.4.1/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
----
-
-## Feature http-client documentation
-
-- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
+Create the index.html file as root (you can use VI editor). The content of the file will be displayed when the web server is accessed, use the HTML code in this LAB at the Optional part of the "Cloud-Init" setup, you can copy and paste the code in each instance depending of the region.
