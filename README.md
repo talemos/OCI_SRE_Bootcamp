@@ -22,9 +22,76 @@ In this lab you are going to configure and create on OCI:
 - [**OCI TENANT**]
 - [**Free Register of DNS name**]
 # START
-## Network Config
+## TASK1: Generate SSH Keys
+The SSH (Secure Shell) protocol is a method for secure remote login from one computer to another. SSH enables secure system administration and file transfers over insecure networks using encryption to secure the connections between endpoints. SSH keys are an important part of securely accessing Oracle Cloud Infrastructure compute instances in the cloud.
 
+We recommend you use the [Oracle Cloud Shell](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm) to interface with the OCI compute instance you will create. Oracle Cloud Shell is browser-based, does not require installation or configuration of software on your laptop, and works independently of your network setup.
 
+IMPORTANT: If the SSH key is not created correctly, you will not be able to connect to your environment and will get errors. Please ensure you create your key properly.
+
+To start the Oracle Cloud shell, go to your Cloud console and click the cloud shell icon at the top right of the page.
+<p align="center">
+  <img src="./Images/CloudShell.jpg">
+</p>
+
+Once the cloud shell has started, enter the following commands. Choose the key name you can remember. This will be the keyname you will use to connect to any compute instances you create. Press Enter twice for no passphrase
+
+```hcl
+mkdir .ssh
+cd .ssh
+ssh-keygen -b 2048 -t rsa -f <your SSH key name>
+```
+
+Note in the output that there are two files, a private key and a public key. Keep the private key safe and don't share its content with anyone. The public key will be needed for various activities and can be uploaded to certain systems as well as copied and pasted to facilitate secure communications in the cloud.
+
+To list the contents of the public key, use the cat command:
+```hcl
+cat <your SSH key name>.pub
+```
+Copy the contents of the public key and save it somewhere for later. When pasting the key into the compute instance in future labs, make sure that you remove any hard returns that may have been added when copying. The .pub key should be one line.
+
+## TASK2: Create Network - VCN
+From the OCI Services menu, click Virtual Cloud Networks under Networking. Select the compartment assigned to you from drop down menu on left part of the screen under Networking and Click Start VCN Wizard.
+*NOTE:* Ensure the correct Compartment is selected under COMPARTMENT list
+
+Fill out the dialog box:
+
+```hcl
+VCN NAME: Provide a name
+COMPARTMENT: Ensure your compartment is selected
+VCN CIDR BLOCK: Provide a CIDR block (10.0.0.0/16)
+PUBLIC SUBNET CIDR BLOCK: Provide a CIDR block (10.0.1.0/24)
+PRIVATE SUBNET CIDR BLOCK: Provide a CIDR block (10.0.2.0/24)
+```
+
+Click Next
+Verify all the information and Click Create.
+
+This will create a VCN with followig components:
+VCN, Public subnet, Private subnet, Internet gateway (IG), NAT gateway (NAT), Service gateway (SG)
+## TASK3: Create Two Compute Instance and Install Web Server
+Switch to the OCI console. From OCI services menu, Click Instances under Compute.
+
+Click Create Instance. Fill out the dialog box:
+
+```hcl
+Name your instance: Enter a name
+Choose an operating system or image source: For the image, we recommend using the Latest Oracle Linux available. It is the default selection.
+Availability Domain: Select availability domain
+Instance Shape: Click on change shape if you want to use a different shape from the default one
+Under Configure Networking
+Virtual cloud network compartment: Select your compartment
+Virtual cloud network: Choose the VCN you created earlier
+Subnet Compartment: Choose your compartment.
+Subnet: Choose the Private Subnet
+Use network security groups to control traffic : Leave un-checked
+Configure Boot Volume: Leave the default choices
+Add SSH Keys: Choose 'Paste SSH Keys' and paste the Public Key you created in Cloud Shell earlier. Ensure when you are pasting that you paste one line
+```
+
+NOTE: The lab instruction places the instances on a private subnets. If you wish to access them, you can create the Bastion Service and create an SSH Session.
+
+Click Create.
 
 ```hcl
 CREATE USER mnocidemo IDENTIFIED BY "XXXXXXXXX";
