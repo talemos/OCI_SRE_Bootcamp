@@ -19,8 +19,8 @@ In this lab you are going to configure and create on OCI:
 - **Put it all together to manage the network traffic of your application**
 ## Required tools to create this DEMO
 
-- [**OCI TENANT**]
-- [**Free Register of DNS name**]
+- [**OCI TENANT**](https://www.oracle.com/cloud/free/)
+- [**Free Register of DNS name**](https://www.freenom.com/)
 # START
 ## TASK1: Generate SSH Keys
 The SSH (Secure Shell) protocol is a method for secure remote login from one computer to another. SSH enables secure system administration and file transfers over insecure networks using encryption to secure the connections between endpoints. SSH keys are an important part of securely accessing Oracle Cloud Infrastructure compute instances in the cloud.
@@ -89,7 +89,7 @@ Configure Boot Volume: Leave the default choices
 Add SSH Keys: Choose 'Paste SSH Keys' and paste the Public Key you created in Cloud Shell earlier. Ensure when you are pasting that you paste one line
 ```
 
-NOTE: The lab instruction places the instances on a private subnets. If you wish to access them, you can create the Bastion Service and create an SSH Session.
+NOTE: The lab instruction places the instances on a <b>private subnets</b>. If you wish to access them, you can create the Bastion Service and create an SSH Session.
 
 Click Create.
 
