@@ -169,7 +169,7 @@ Using the same method, create 2 instances on each region, just change the Instan
 - [**OPTIONAL**]
 If you want to use [Bastion Service](https://docs.oracle.com/en-us/iaas/Content/Bastion/Concepts/bastionoverview.htm) to access your instance, on the creation process, go to "Advanced Options" -> "Oracle Cloud Agent" and select the checkbox to enable "Bastion"
 <p align="center">
-  <img src="./Images/Bastion.jpg">
+  <img src="./Images/Bastions.jpg">
 </p>
 
 After compleating this TASK you should have on your OCI account:
