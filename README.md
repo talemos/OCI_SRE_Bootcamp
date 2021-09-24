@@ -205,3 +205,48 @@ sudo systemctl enable httpd
 ```
 
 Create the index.html file as root (you can use VI editor). The content of the file will be displayed when the web server is accessed, use the HTML code in this LAB at the Optional part of the "Cloud-Init" setup, you can copy and paste the code in each instance depending of the region.
+
+## TASK5: Create Load Balancer
+Now that we have the Instances up and running with Apache configured, let's create the Load Balancer to use both instances, since we are going to work with Edge services as well, we need to create two Load Balacers, one in each region that we are going to provide our application. This use case is the same for real customers that want to deploy their application on multi regions across the globe, to see the overall architecture of this deployment check this [link](https://docs.oracle.com/en/solutions/ha-web-app/index.html#GUID-D92DB4A1-5816-4F95-A0F5-57821B0F3EBF). The deployment we are going to create is very similar, just add one more region and put on top the DNS and Traffic Management Edge Services.
+
+**Create the Load Balancer**
+From OCI Services menu, Click Load Balancers under Networking.
+<p align="center">
+  <img src="./Images/LoadBalancer-1.jpg">
+</p>
+Click Create Load Balancer. Fill out the dialog box:
+```hcl
+LOAD BALANCER NAME: Enter a name for your load balancer.
+CHOOSE VISIBILITY TYPE: Public
+CHOSSE FLEXIBLE SHAPE
+CHOOSE THE MINIMUM BANDWIDTH: 10Mbps
+VIRTUAL CLOUD NETWORK: Choose your Virtual Cloud Network
+SUBNET: Choose the Regional Subnet we created
+```
+Click Next or Choose Backends:
+<p align="center">
+  <img src="./Images/LoadBalancer-2.jpg">
+</p>
+SPECIFY A LOAD BALANCING POLICY: Weighted Round Robin
+Click Add Backend and choose the two compute instances created earlier
+<p align="center">
+  <img src="./Images/LoadBalancer-3.jpg">
+</p>
+Configure the Listener:
+<p align="center">
+  <img src="./Images/LoadBalancer-4.jpg">
+</p>
+SPECIFY THE TYPE OF TRAFFIC YOUR LISTENER HANDLES: HTTP
+SPECIFY THE PORT YOUR LISTENER MONITORS FOR INGRESS TRAFFIC: 80
+
+<b>If you want to enable the Logs, just use the defaults options for "Create a new log group"</b>
+<p align="center">
+  <img src="./Images/LoadBalancer-5.jpg">
+</p>
+Use this option for "Error" and "Access" logs
+
+After these steps, you can create the Load Balancer and wait untill it's available.
+Can you test the application as soon it's available? What's the problem with the access?
+
+## TASK6: Configure Security
+
