@@ -384,4 +384,4 @@ We use different vantage points to create HTTP access and measure the availabili
 You can create a "fake" error on the Health Check and the policy is going to route the request to the next available region.
 
 ## CONCLUSION
-Thanks for completing this lab, hope you learned about traffic management and how to make your solutions more reliable and scalable in the cloud. Another great vantage of this type of Architecture is the downtime for patching the infrastructure, you can take an entire region out and still be available for your customers.
+Thanks for completing this lab, hope you learned about traffic management and how to make your solutions more reliable and scalable in the cloud. Another great advantage of this multi-region resiliency is the downtime for patching the infrastructure, you can take an entire region out and still be available for your customers.
