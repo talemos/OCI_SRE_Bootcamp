@@ -1,4 +1,4 @@
-# OCI Load Balancer and Traffic Management Steering Policies
+# OCI Load Balancer & Traffic Management Steering Policies
 This repository has practical use case for LB and Global Region Traffic Management Policies
 
 # IMPORTANT
