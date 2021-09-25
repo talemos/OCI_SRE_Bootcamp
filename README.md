@@ -355,7 +355,7 @@ GEOLOCATION: Choose Ashburn Geolocation and Choose North America Geolocation
 Pool Priority:
 Pool 1: Select Ashburn Pool
 Pool 2: Select Brazil Pool
-You can add "Global Catch-All Rule" in case the client is neither on North or South Americas, but that's not needed for this lab.
+You can add "Global Catch-All Rule", but that's not needed for this lab.
 Create a new "Health Check" for this rule, just as the screen below
 Change the INTERVAL for 10 seconds
 On the "Attached Domain(s) (Optional)"
