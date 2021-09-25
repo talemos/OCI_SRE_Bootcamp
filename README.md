@@ -326,6 +326,7 @@ Click on Create:
 </p>
 Choose the "GEOLOCATION STEERING" Policy, the rest of the configuration it's going to change based on the type o policy selected.
 Complete the configuration with these parameters:
+
 ```hcl
 POLICY NAME: Your policy name
 POLICY TTL: 60
@@ -362,6 +363,7 @@ SUBDOMAIN: <YOUR SUB DOMAIN CREATED>
 COMPARTMENT: The compartment you are using for this lab
 ZONE: <YOUR PUBLIC ZONE>
 ```
+
 <p align="center">
   <img src="./Images/Traffick-2.jpg">
 </p>
