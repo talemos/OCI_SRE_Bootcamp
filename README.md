@@ -313,7 +313,7 @@ Enter your zone name, the same you created on Freenon, my case was: thiagolemos.
 
 Once it completes, enter into your public zone, go into the "records" and create a new record:
 <p align="center">
-  <img src="./Images/DNS-2.jpg">
+  <img src="./Images/DNS-3.jpg">
 </p>
 Just create with a subdomain, like "web", the complete name could be web.thiagolemos.ga, but you can choose any other.
 On the "Address" field, enter the Public IP of your Load Balancer. Once you completed this you have created an URL to reach your Public Load Balancer from the Internet (WWW), if you open your Browser and type the full URL you just created, the Apache index.html page should appear.
