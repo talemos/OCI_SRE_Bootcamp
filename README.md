@@ -290,6 +290,31 @@ Destination Port Range: 80
 ```
 <b>Click Add Ingress Rule.</b>
 
-Now you should be able to call your application from the public IP of the Load Balancer, you can also do the same network configuration using ["Network Security Groups"](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/networksecuritygroups.htm)
+Now you should be able to call your application from the public IP of the Load Balancer, you can also do the same network configuration using ["Network Security Groups"](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/networksecuritygroups.htm). Remeber to also configure the security of the other region, you need to replicate these steps to also complete the second region configuration.
 
 <b>Note:</b> Be sure to take note of the "Health" field in the Networking -> Load Balancers dashboard. If the health is "Critical," the load balancer may not work as intended, you need to troubleshoote the reason why, could be some lack of configuration with security or other network issue, plase follow this [link](https://docs.oracle.com/en-us/iaas/Content/Balance/Troubleshooting/common_load_balancer_errors.htm#health_check_errors) to verify the problem.
+
+## TASK7: Configure DNS Zones
+<b><i>If you don't want to create an account on Freenon, then you need to stop the LAB here, the rest of the DNS configuration and Traffic Management can only be accomplish with the DNS name created.</i></b>
+
+Register your free DNS at Freenon, you can choose from any available free domain. I have created "thiagolemos.ga"
+Let's continue the setup of the Public Zone:
+Go on the console -> network -> DNS Management
+<p align="center">
+  <img src="./Images/DNS-1.jpg">
+</p>
+Click on the "Manage Zones"
+
+Create a new Public Zone:
+<p align="center">
+  <img src="./Images/DNS-2.jpg">
+</p>
+Enter your zone name, the same you created on Freenon, my case was: thiagolemos.ga, also choose your compartment and choose the zone as "Primary", click on Create.
+
+Once it completes, enter into your public zone, go into the "records" and create a new record:
+<p align="center">
+  <img src="./Images/DNS-2.jpg">
+</p>
+Just create with a subdomain, like "web", the complete name could be web.thiagolemos.ga, but you can choose any other.
+On the "Address" field, enter the Public IP of your Load Balancer. Once you completed this you have created an URL to reach your Public Load Balancer from the Internet (WWW), if you open your Browser and type the full URL you just created, the Apache index.html page should appear.
+
