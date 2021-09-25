@@ -367,6 +367,7 @@ ZONE: <YOUR PUBLIC ZONE>
 <p align="center">
   <img src="./Images/Traffick-2.jpg">
 </p>
+
 <b>Create the Policy</b>
 
 Once you completed this configuration, the public IP of your Load Balancer on the Public Zone is going to be "occluded by Steering Policy", with means that depending on the client region request for this name, the client is going to be redirected to the corresponding Load Balancer for nearest application available to him.
