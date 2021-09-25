@@ -357,16 +357,15 @@ Pool 1: Select Ashburn Pool
 Pool 2: Select Brazil Pool
 You can add "Global Catch-All Rule" in case the client is neither on North or South Americas, but that's not needed for this lab.
 Create a new "Health Check" for this rule, just as the screen below
+<p align="center">
+  <img src="./Images/Traffick-2.jpg">
+</p>
 Change the INTERVAL for 10 seconds
 On the "Attached Domain(s) (Optional)"
 SUBDOMAIN: <YOUR SUB DOMAIN CREATED>
 COMPARTMENT: The compartment you are using for this lab
 ZONE: <YOUR PUBLIC ZONE>
 ```
-
-<p align="center">
-  <img src="./Images/Traffick-2.jpg">
-</p>
 <b>Create the Policy</b>
 
 Once you completed this configuration, the public IP of your Load Balancer on the Public Zone is going to be "occluded by Steering Policy", with means that depending on the client region request for this name, the client is going to be redirected to the corresponding Load Balancer for nearest application available to him.
