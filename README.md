@@ -318,3 +318,67 @@ Once it completes, enter into your public zone, go into the "records" and create
 Just create with a subdomain, like "web", the complete name could be web.thiagolemos.ga, but you can choose any other.
 On the "Address" field, enter the Public IP of your Load Balancer. Once you completed this you have created an URL to reach your Public Load Balancer from the Internet (WWW), if you open your Browser and type the full URL you just created, the Apache index.html page should appear.
 
+## TASK8: Configure Traffic Management
+To complete the configuration using Traffic Management, go to the console -> network -> traffick management steering policies
+Click on Create:
+<p align="center">
+  <img src="./Images/Traffick-1.jpg">
+</p>
+Choose the "GEOLOCATION STEERING" Policy, the rest of the configuration it's going to change based on the type o policy selected.
+Complete the configuration with these parameters:
+```hcl
+POLICY NAME: Your policy name
+POLICY TTL: 60
+Answer Pool(s)
+Answer Pool 1
+ANSWER POOL NAME: Brazil Pool
+Answers:
+NAME: Sao Paulo
+TYPE: A
+RDATA: <Public Load Balancer IP from Sao Paulo Region>
+Answer Pool 2
+ANSWER POOL NAME: Ashburn Pool
+Answers:
+NAME: Ashburn
+TYPE: A
+RDATA: <Public Load Balancer IP from Ashburn Region>
+Geolocation Steering Rules
+Rule 1
+GEOLOCATION: Choose Brazil Geolocation and Choose South America Geolocation
+Pool Priority:
+Pool 1: Select Brazil Pool
+Pool 2: Select Ashburn Pool
+Click on the "+Additional Rule"
+Rule 2
+GEOLOCATION: Choose Ashburn Geolocation and Choose North America Geolocation
+Pool Priority:
+Pool 1: Select Ashburn Pool
+Pool 2: Select Brazil Pool
+You can add "Global Catch-All Rule" in case the client is neither on North or South Americas, but that's not needed for this lab.
+Create a new "Health Check" for this rule, just as the screen below:
+<p align="center">
+  <img src="./Images/Traffick-2.jpg">
+</p>
+Change the INTERVAL for 10 seconds
+On the "Attached Domain(s) (Optional)"
+SUBDOMAIN: <YOUR SUB DOMAIN CREATED>
+COMPARTMENT: The compartment you are using for this lab
+ZONE: <YOUR PUBLIC ZONE>
+```
+<b>Create the Policy</b>
+
+Once you completed this configuration, the public IP of your Load Balancer on the Public Zone is going to be "occluded by Steering Policy", with means that depending on the client region request for this name, the client is going to be redirected to the corresponding Load Balancer for nearest application available to him.
+
+In this case, we have only 2 regions available, but you could create as many regions as you want, and also, if any region fails to complete the client request, there's a fail over to the second option on the policy, in this case, even for a client in North America if the environment in Ashburn is not available, the client is going to be redirected to the South America region and the fail over is automatic.
+
+You can check this consulting the "Health Check" page on console -> observability & management -> health checks:
+If enter the Health Check you created during the process to create the policy, you going to check the status of your Load Balancers in each region
+<p align="center">
+  <img src="./Images/Traffick-3.jpg">
+</p>
+We use different vantage points to create HTTP access and measure the availability of the resource, if there's a problem the pool is switched automatic, if you want to see the error, just remote the configuration of the Security List to allow the access from the Internet to the Load Balancer HTTP listener.
+
+You can create a "fake" error on the Health Check and the policy is going to route the request to the next available region.
+
+## CONCLUSION
+Thanks for completing this lab, hope you learned about traffic management and how to make your solutions more reliable and scalable in the cloud. Another great vantage of this type of Architecture is the downtime for patching the infrastructure, you can take an entire region out and still be available for your customers.
