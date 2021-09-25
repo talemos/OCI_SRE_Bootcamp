@@ -249,4 +249,47 @@ After these steps, you can create the Load Balancer and wait untill it's availab
 Can you test the application as soon it's available? What's the problem with the access?
 
 ## TASK6: Configure Security
+Now it's time to configure the Security Lists to open the ports to connect your Load Balancer to the Internet and also to open the conectivity to the Load Balancer to your Apache Instances private sub network.
 
+To complete this, let's first open the Load Balancer listener to the Internet, first make sure your public subnet has Internet Gateway and the Route Table has the trafic route configured:
+<p align="center">
+  <img src="./Images/RouteTable.jpg">
+</p>
+You need to have the route: 0.0.0.0/0 to your Internet Gateway on the public subnet, otherwise you won't route the traffic from the Internet to the Load Balancer Listener.
+
+Now create or alter the existing Security List for the public subnet on your VCN to add these configurations:
+Click Add Ingress Rule. Click +Additional Ingress Rule and enter the following ingress rule; Ensure to leave STATELESS flag un-checked
+```hcl
+Source Type: CIDR
+Source CIDR: Enter 0.0.0.0/0.
+IP Protocol: Select TCP.
+Source Port Range: All.
+Destination Port Range: Enter 80 (the listener port).
+```
+<b>Click Add Ingress Rule.</b>
+
+Click Egress Rule under Resources. Click Add Egress Rule, Click +Additional Egress Rule and enter the following Egress rule; Ensure to leave STATELESS flag un-checked.
+```hcl
+Destination Type: CIDR
+Destination CIDR: 0.0.0.0/0
+IP Protocol: Select TCP.
+Destination Port Range: All.
+```
+<b>Click Add Egress Rule.</b>
+
+Now create or alter the existing Security List for the private subnet on your VCN to add these configurations:
+This private subnet is were your Apache instances are located.
+
+Click Add Ingress Rule. Click +Additional Ingress Rule and enter the following ingress rule; Ensure to leave STATELESS flag un-checked
+```hcl
+Source Type: CIDR
+Source CIDR: <Your Public Subnet CIDR>
+IP Protocol: Select TCP.
+Source Port Range: All
+Destination Port Range: 80
+```
+<b>Click Add Ingress Rule.</b>
+
+Now you should be able to call your application from the public IP of the Load Balancer, you can also do the same network configuration using ["Network Security Groups"](https://docs.oracle.com/en-us/iaas/Content/Network/Concepts/networksecuritygroups.htm)
+
+<b>Note:</b> Be sure to take note of the "Health" field in the Networking -> Load Balancers dashboard. If the health is "Critical," the load balancer may not work as intended, you need to troubleshoote the reason why, could be some lack of configuration with security or other network issue, plase follow this [link](https://docs.oracle.com/en-us/iaas/Content/Balance/Troubleshooting/common_load_balancer_errors.htm#health_check_errors) to verify the problem.
