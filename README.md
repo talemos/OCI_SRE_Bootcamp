@@ -1,5 +1,5 @@
-# Load Balancer & Traffic Management Steering Policies
-This repository has practical use case for LB and Global Region Traffic Management Policies
+# OCI SRE Bootcamp Lab
+Welcome to this Bootcamp LAB, where you'll learn some of the core OCI services for SRE with practical usage in OCI account.
 
 # IMPORTANT
 To complete this lab, you must have an OCI account, not all services are free tier, but you should be able to complete all the lab with an active OCI trial account, if don't have one [Click Here](https://www.oracle.com/cloud/free/)
